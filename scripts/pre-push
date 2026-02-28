@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+echo "Running pre-push checks..."
+
+# Run all CI checks
+make ci
+
+echo "✓ All pre-push checks passed!"
