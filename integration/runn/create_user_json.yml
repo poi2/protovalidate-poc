@@ -9,76 +9,71 @@ vars:
     password: "password123"
     password_confirmation: "password123"
 
-tests:
-  - desc: "JSON: Create user with valid data"
-    steps:
-      - req:
-          POST /user.v1.UserService/CreateUser:
-            headers:
-              Content-Type: application/json
-            body:
+steps:
+  # Test 1: Valid user creation
+  - desc: "Create user with valid data"
+    req:
+      /user.v1.UserService/CreateUser:
+        post:
+          body:
+            application/json:
               name: "{{ vars.valid_user.name }}"
               email: "{{ vars.valid_user.email }}"
               password: "{{ vars.valid_user.password }}"
               passwordConfirmation: "{{ vars.valid_user.password_confirmation }}"
-        test:
-          - current.res.status == 200
-          - current.res.body.user.name == "{{ vars.valid_user.name }}"
-          - current.res.body.user.email == "{{ vars.valid_user.email }}"
-          - current.res.body.user.id != ""
+  - test: steps[0].res.status == 200
+  - test: steps[0].res.body.user.name == "John Doe"
+  - test: steps[0].res.body.user.email == "john@example.com"
+  - test: steps[0].res.body.user.id != ""
 
-  - desc: "JSON: Validation error - empty name"
-    steps:
-      - req:
-          POST /user.v1.UserService/CreateUser:
-            headers:
-              Content-Type: application/json
-            body:
+  # Test 2: Validation error - empty name
+  - desc: "Validation error - empty name"
+    req:
+      /user.v1.UserService/CreateUser:
+        post:
+          body:
+            application/json:
               name: ""
               email: "john@example.com"
               password: "password123"
               passwordConfirmation: "password123"
-        test:
-          - current.res.status == 400
+  - test: steps[5].res.status == 400
 
-  - desc: "JSON: Validation error - invalid email"
-    steps:
-      - req:
-          POST /user.v1.UserService/CreateUser:
-            headers:
-              Content-Type: application/json
-            body:
+  # Test 3: Validation error - invalid email
+  - desc: "Validation error - invalid email"
+    req:
+      /user.v1.UserService/CreateUser:
+        post:
+          body:
+            application/json:
               name: "John Doe"
               email: "not-an-email"
               password: "password123"
               passwordConfirmation: "password123"
-        test:
-          - current.res.status == 400
+  - test: steps[7].res.status == 400
 
-  - desc: "JSON: Validation error - password too short"
-    steps:
-      - req:
-          POST /user.v1.UserService/CreateUser:
-            headers:
-              Content-Type: application/json
-            body:
+  # Test 4: Validation error - password too short
+  - desc: "Validation error - password too short"
+    req:
+      /user.v1.UserService/CreateUser:
+        post:
+          body:
+            application/json:
               name: "John Doe"
               email: "john@example.com"
               password: "short"
               passwordConfirmation: "short"
-        test:
-          - current.res.status == 400
+  - test: steps[9].res.status == 400
 
-  - desc: "JSON: Validation error - passwords do not match"
-    steps:
-      - req:
-          POST /user.v1.UserService/CreateUser:
-            headers:
-              Content-Type: application/json
-            body:
+  # Test 5: Validation error - passwords do not match
+  - desc: "Validation error - passwords do not match"
+    req:
+      /user.v1.UserService/CreateUser:
+        post:
+          body:
+            application/json:
               name: "John Doe"
               email: "john@example.com"
               password: "password123"
               passwordConfirmation: "different"
-        test:
-          - current.res.status == 400
+  - test: steps[11].res.status == 400
