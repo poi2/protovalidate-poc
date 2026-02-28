@@ -102,11 +102,25 @@ func (x *User) GetUpdatedAt() *timestamppb.Timestamp {
 
 // CreateUserRequest is the request message for creating a user
 type CreateUserRequest struct {
-	state                protoimpl.MessageState `protogen:"open.v1"`
-	Name                 string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Email                string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Password             string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	PasswordConfirmation string                 `protobuf:"bytes,4,opt,name=password_confirmation,json=passwordConfirmation,proto3" json:"password_confirmation,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// User's full name
+	// Validation errors:
+	//   - reason: "USER_NAME_NOT_EMPTY" - name cannot be empty (custom CEL rule)
+	//   - reason: "STRING_MIN_LEN" - value length must be at least 1 characters
+	//   - reason: "STRING_MAX_LEN" - value length must be at most 255 characters
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// User's email address
+	// Validation errors:
+	//   - reason: "STRING_EMAIL" - value must be a valid email address
+	//   - reason: "STRING_MAX_LEN" - value length must be at most 255 characters
+	Email string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	// User's password
+	// Validation errors:
+	//   - reason: "STRING_MIN_LEN" - value length must be at least 8 characters
+	//   - reason: "STRING_MAX_LEN" - value length must be at most 72 characters
+	Password string `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	// Password confirmation (must match password field)
+	PasswordConfirmation string `protobuf:"bytes,4,opt,name=password_confirmation,json=passwordConfirmation,proto3" json:"password_confirmation,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -228,15 +242,15 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x8b\x02\n" +
+	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x8e\x02\n" +
 	"\x11CreateUserRequest\x12\x1e\n" +
 	"\x04name\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\xff\x01R\x04name\x12 \n" +
 	"\x05email\x18\x02 \x01(\tB\n" +
 	"\xbaH\ar\x05\x18\xff\x01`\x01R\x05email\x12%\n" +
 	"\bpassword\x18\x03 \x01(\tB\t\xbaH\x06r\x04\x10\b\x18HR\bpassword\x123\n" +
-	"\x15password_confirmation\x18\x04 \x01(\tR\x14passwordConfirmation:X\xbaHU\x1aS\n" +
-	"\x0epassword_match\x12\x14passwords must match\x1a+this.password == this.password_confirmation\"7\n" +
+	"\x15password_confirmation\x18\x04 \x01(\tR\x14passwordConfirmation:[\xbaHX\x1aV\n" +
+	"\x11password_mismatch\x12\x14passwords must match\x1a+this.password == this.password_confirmation\"7\n" +
 	"\x12CreateUserResponse\x12!\n" +
 	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user2V\n" +
 	"\vUserService\x12G\n" +
