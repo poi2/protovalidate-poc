@@ -38,6 +38,12 @@ steps:
               password: "password123"
               passwordConfirmation: "password123"
   - test: steps[5].res.status == 400
+  - test: steps[5].res.body.code == "invalid_argument"
+  - test: len(steps[5].res.body.details) == 1
+  - test: steps[5].res.body.details[0].type == "google.rpc.BadRequest"
+  - test: len(steps[5].res.body.details[0].debug.fieldViolations) == 1
+  - test: steps[5].res.body.details[0].debug.fieldViolations[0].field == "name"
+  - test: steps[5].res.body.details[0].debug.fieldViolations[0].reason == "STRING_MIN_LEN"
 
   # Test 3: Validation error - invalid email
   - desc: "Validation error - invalid email"
@@ -50,7 +56,13 @@ steps:
               email: "not-an-email"
               password: "password123"
               passwordConfirmation: "password123"
-  - test: steps[7].res.status == 400
+  - test: steps[13].res.status == 400
+  - test: steps[13].res.body.code == "invalid_argument"
+  - test: len(steps[13].res.body.details) == 1
+  - test: steps[13].res.body.details[0].type == "google.rpc.BadRequest"
+  - test: len(steps[13].res.body.details[0].debug.fieldViolations) == 1
+  - test: steps[13].res.body.details[0].debug.fieldViolations[0].field == "email"
+  - test: steps[13].res.body.details[0].debug.fieldViolations[0].reason == "STRING_EMAIL"
 
   # Test 4: Validation error - password too short
   - desc: "Validation error - password too short"
@@ -63,7 +75,13 @@ steps:
               email: "john@example.com"
               password: "short"
               passwordConfirmation: "short"
-  - test: steps[9].res.status == 400
+  - test: steps[21].res.status == 400
+  - test: steps[21].res.body.code == "invalid_argument"
+  - test: len(steps[21].res.body.details) == 1
+  - test: steps[21].res.body.details[0].type == "google.rpc.BadRequest"
+  - test: len(steps[21].res.body.details[0].debug.fieldViolations) == 1
+  - test: steps[21].res.body.details[0].debug.fieldViolations[0].field == "password"
+  - test: steps[21].res.body.details[0].debug.fieldViolations[0].reason == "STRING_MIN_LEN"
 
   # Test 5: Validation error - passwords do not match
   - desc: "Validation error - passwords do not match"
@@ -76,4 +94,10 @@ steps:
               email: "john@example.com"
               password: "password123"
               passwordConfirmation: "different"
-  - test: steps[11].res.status == 400
+  - test: steps[29].res.status == 400
+  - test: steps[29].res.body.code == "invalid_argument"
+  - test: len(steps[29].res.body.details) == 1
+  - test: steps[29].res.body.details[0].type == "google.rpc.BadRequest"
+  - test: len(steps[29].res.body.details[0].debug.fieldViolations) == 1
+  - test: steps[29].res.body.details[0].debug.fieldViolations[0].reason == "PASSWORD_MISMATCH"
+  - test: steps[29].res.body.details[0].debug.fieldViolations[0].description == "passwords must match"

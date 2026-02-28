@@ -63,8 +63,7 @@ steps:
           email: "john@example.com"
           password: "password123"
           password_confirmation: "password123"
-        test:
-          - steps[11].res.status != 0  # Expect error status
+  - test: steps[11].res.status == 3  # INVALID_ARGUMENT (error details are available via grpcurl but not directly accessible in runn)
 
   # gRPC Test 3: Validation error - passwords do not match
   - desc: "gRPC: Validation error - passwords do not match (expect error)"
@@ -75,5 +74,4 @@ steps:
           email: "john@example.com"
           password: "password123"
           password_confirmation: "different"
-        test:
-          - steps[12].res.status != 0  # Expect error status
+  - test: steps[13].res.status == 3  # INVALID_ARGUMENT (error details are available via grpcurl but not directly accessible in runn)
