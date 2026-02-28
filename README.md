@@ -24,7 +24,7 @@ protovalidate を使って、FE/BE の両方で同じ validation を行えるこ
 
 ## プロジェクト構造
 
-```
+```text
 .
 ├── proto/                  # Proto 定義
 │   ├── buf.yaml
@@ -137,7 +137,7 @@ make install-hooks
 
 **エラー構造:**
 
-```
+```text
 validation errors:
  - passwords must match
  - name: value length must be at least 1 characters

@@ -57,7 +57,7 @@
 
 ### PR 作成
 
-- PR #1: https://github.com/poi2/protovalidate-poc/pull/1
+- [PR #1](https://github.com/poi2/protovalidate-poc/pull/1)
 
 ### 次のステップ
 
