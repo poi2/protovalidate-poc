@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package user.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
+// User represents a user entity
+message User {
+  string id = 1;
+  string name = 2 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 255
+  }];
+  string email = 3 [(buf.validate.field).string = {
+    email: true
+    max_len: 255
+  }];
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// CreateUserRequest is the request message for creating a user
+message CreateUserRequest {
+  string name = 1 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 255
+  }];
+  string email = 2 [(buf.validate.field).string = {
+    email: true
+    max_len: 255
+  }];
+  string password = 3 [(buf.validate.field).string = {
+    min_len: 8
+    max_len: 72
+  }];
+  string password_confirmation = 4;
+
+  // Multiple fields validation: passwords must match
+  option (buf.validate.message).cel = {
+    id: "password_match"
+    message: "passwords must match"
+    expression: "this.password == this.password_confirmation"
+  };
+}
+
+// CreateUserResponse is the response message for creating a user
+message CreateUserResponse {
+  User user = 1;
+}
+
+// UserService provides user-related operations
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
+}

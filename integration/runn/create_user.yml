@@ -1,0 +1,123 @@
+desc: CreateUser API tests (JSON and gRPC)
+runners:
+  req_json: http://localhost:8080
+  req_grpc: localhost:8080
+
+vars:
+  valid_user:
+    name: "John Doe"
+    email: "john@example.com"
+    password: "password123"
+    password_confirmation: "password123"
+
+tests:
+  - desc: "JSON: Create user with valid data"
+    steps:
+      - req_json:
+          POST /user.v1.UserService/CreateUser:
+            headers:
+              Content-Type: application/json
+            body:
+              name: "{{ vars.valid_user.name }}"
+              email: "{{ vars.valid_user.email }}"
+              password: "{{ vars.valid_user.password }}"
+              passwordConfirmation: "{{ vars.valid_user.password_confirmation }}"
+        test:
+          - current.res.status == 200
+          - current.res.body.user.name == "{{ vars.valid_user.name }}"
+          - current.res.body.user.email == "{{ vars.valid_user.email }}"
+          - current.res.body.user.id != ""
+
+  - desc: "JSON: Validation error - empty name"
+    steps:
+      - req_json:
+          POST /user.v1.UserService/CreateUser:
+            headers:
+              Content-Type: application/json
+            body:
+              name: ""
+              email: "john@example.com"
+              password: "password123"
+              passwordConfirmation: "password123"
+        test:
+          - current.res.status == 400
+
+  - desc: "JSON: Validation error - invalid email"
+    steps:
+      - req_json:
+          POST /user.v1.UserService/CreateUser:
+            headers:
+              Content-Type: application/json
+            body:
+              name: "John Doe"
+              email: "not-an-email"
+              password: "password123"
+              passwordConfirmation: "password123"
+        test:
+          - current.res.status == 400
+
+  - desc: "JSON: Validation error - password too short"
+    steps:
+      - req_json:
+          POST /user.v1.UserService/CreateUser:
+            headers:
+              Content-Type: application/json
+            body:
+              name: "John Doe"
+              email: "john@example.com"
+              password: "short"
+              passwordConfirmation: "short"
+        test:
+          - current.res.status == 400
+
+  - desc: "JSON: Validation error - passwords do not match"
+    steps:
+      - req_json:
+          POST /user.v1.UserService/CreateUser:
+            headers:
+              Content-Type: application/json
+            body:
+              name: "John Doe"
+              email: "john@example.com"
+              password: "password123"
+              passwordConfirmation: "different"
+        test:
+          - current.res.status == 400
+
+  - desc: "gRPC: Create user with valid data"
+    steps:
+      - req_grpc:
+          user.v1.UserService/CreateUser:
+            message:
+              name: "{{ vars.valid_user.name }}"
+              email: "{{ vars.valid_user.email }}"
+              password: "{{ vars.valid_user.password }}"
+              password_confirmation: "{{ vars.valid_user.password_confirmation }}"
+        test:
+          - current.res.message.user.name == "{{ vars.valid_user.name }}"
+          - current.res.message.user.email == "{{ vars.valid_user.email }}"
+          - current.res.message.user.id != ""
+
+  - desc: "gRPC: Validation error - empty name"
+    steps:
+      - req_grpc:
+          user.v1.UserService/CreateUser:
+            message:
+              name: ""
+              email: "john@example.com"
+              password: "password123"
+              password_confirmation: "password123"
+        test:
+          - current.res.status == "InvalidArgument"
+
+  - desc: "gRPC: Validation error - passwords do not match"
+    steps:
+      - req_grpc:
+          user.v1.UserService/CreateUser:
+            message:
+              name: "John Doe"
+              email: "john@example.com"
+              password: "password123"
+              password_confirmation: "different"
+        test:
+          - current.res.status == "InvalidArgument"
