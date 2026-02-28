@@ -9,8 +9,11 @@ import (
 
 	"buf.build/go/protovalidate"
 	"connectrpc.com/connect"
+	"connectrpc.com/grpcreflect"
 	userv1 "github.com/poi2/protovalidate-poc/go/gen/user/v1"
 	"github.com/poi2/protovalidate-poc/go/gen/user/v1/userv1connect"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -63,10 +66,25 @@ func main() {
 	path, handler := userv1connect.NewUserServiceHandler(server)
 	mux.Handle(path, handler)
 
+	// Add gRPC reflection
+	reflector := grpcreflect.NewStaticReflector(
+		"user.v1.UserService",
+	)
+	mux.Handle(grpcreflect.NewHandlerV1(reflector))
+	mux.Handle(grpcreflect.NewHandlerV1Alpha(reflector))
+
 	addr := ":8080"
 	log.Printf("Server listening on %s", addr)
-	log.Printf("Supports both gRPC and JSON over HTTP/2")
-	if err := http.ListenAndServe(addr, mux); err != nil {
+	log.Printf("Supports both gRPC and Connect protocols over HTTP/2")
+
+	// Use h2c (HTTP/2 Cleartext) to support gRPC without TLS
+	h2s := &http2.Server{}
+	h1s := &http.Server{
+		Addr:    addr,
+		Handler: h2c.NewHandler(mux, h2s),
+	}
+
+	if err := h1s.ListenAndServe(); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }
