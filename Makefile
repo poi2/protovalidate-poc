@@ -46,7 +46,7 @@ run-server: build ## Run the server
 
 .PHONY: integration-test
 integration-test: ## Run integration tests (requires server to be running)
-	cd integration/runn && runn run create_user.yml
+	cd integration/runn && runn run create_user_json.yml
 
 .PHONY: integration-test-full
 integration-test-full: ## Build, run server, test, then stop server
