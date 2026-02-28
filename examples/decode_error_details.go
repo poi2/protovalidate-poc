@@ -1,3 +1,5 @@
+//go:build ignore
+
 // Package main demonstrates how to decode error details from API responses
 package main
 

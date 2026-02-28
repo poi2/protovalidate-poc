@@ -1,3 +1,5 @@
+//go:build ignore
+
 // Package main demonstrates rule_id to reason code conversion
 package main
 

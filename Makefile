@@ -26,7 +26,7 @@ proto-check: proto-lint ## Check proto files (lint only, no breaking check on ma
 
 .PHONY: md-lint
 md-lint: ## Run markdownlint
-	markdownlint '**/*.md' --ignore node_modules --ignore go
+	markdownlint '**/*.md' --ignore node_modules --ignore go --ignore __private
 
 .PHONY: test
 test: ## Run Go unit tests

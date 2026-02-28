@@ -205,12 +205,12 @@ Connect-RPCのエラーレスポンスに `google.rpc.BadRequest` を含める�
 
 protovalidateの`rule_id`は、Google API標準のUPPER_SNAKE_CASE形式に自動変換：
 
-| rule_id | reason | 説明 |
-|---------|--------|------|
-| `string.min_len` | `STRING_MIN_LEN` | 文字列が最小長より短い |
-| `string.max_len` | `STRING_MAX_LEN` | 文字列が最大長を超える |
-| `string.email` | `STRING_EMAIL` | メール形式が無効 |
-| `password_mismatch` | `PASSWORD_MISMATCH` | パスワードが一致しない |
+| rule_id              | reason               | 説明                       |
+| -------------------- | -------------------- | -------------------------- |
+| `string.min_len`     | `STRING_MIN_LEN`     | 文字列が最小長より短い     |
+| `string.max_len`     | `STRING_MAX_LEN`     | 文字列が最大長を超える     |
+| `string.email`       | `STRING_EMAIL`       | メール形式が無効           |
+| `password_mismatch`  | `PASSWORD_MISMATCH`  | パスワードが一致しない     |
 
 変換ルール: ドット(`.`)をアンダースコア(`_`)に置換し、大文字化
 

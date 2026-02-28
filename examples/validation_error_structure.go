@@ -1,3 +1,5 @@
+//go:build ignore
+
 // Package main demonstrates how to inspect protovalidate ValidationError structure
 package main
 
