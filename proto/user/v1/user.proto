@@ -22,23 +22,42 @@ message User {
 
 // CreateUserRequest is the request message for creating a user
 message CreateUserRequest {
+  // User's full name
+  // Validation errors:
+  //   - reason: "USER_NAME_NOT_EMPTY" - name cannot be empty (custom CEL rule)
+  //   - reason: "STRING_MIN_LEN" - value length must be at least 1 characters
+  //   - reason: "STRING_MAX_LEN" - value length must be at most 255 characters
   string name = 1 [(buf.validate.field).string = {
     min_len: 1
     max_len: 255
   }];
+
+  // User's email address
+  // Validation errors:
+  //   - reason: "STRING_EMAIL" - value must be a valid email address
+  //   - reason: "STRING_MAX_LEN" - value length must be at most 255 characters
   string email = 2 [(buf.validate.field).string = {
     email: true
     max_len: 255
   }];
+
+  // User's password
+  // Validation errors:
+  //   - reason: "STRING_MIN_LEN" - value length must be at least 8 characters
+  //   - reason: "STRING_MAX_LEN" - value length must be at most 72 characters
   string password = 3 [(buf.validate.field).string = {
     min_len: 8
     max_len: 72
   }];
+
+  // Password confirmation (must match password field)
   string password_confirmation = 4;
 
   // Multiple fields validation: passwords must match
+  // Validation errors:
+  //   - reason: "PASSWORD_MISMATCH" - passwords must match
   option (buf.validate.message).cel = {
-    id: "password_match"
+    id: "password_mismatch"
     message: "passwords must match"
     expression: "this.password == this.password_confirmation"
   };
