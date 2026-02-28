@@ -15,7 +15,6 @@ coverage.out
 *.dylib
 *.test
 *.out
-go.sum
 
 # Node
 node_modules/
