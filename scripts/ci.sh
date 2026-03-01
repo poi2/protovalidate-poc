@@ -26,72 +26,58 @@ fi
 
 # Helper functions
 step_start() {
+  echo ""
+  echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
   echo -e "${BLUE}[${1}]${NC} ${BOLD}Starting...${NC}"
+  echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 }
 
 step_success() {
   echo -e "${GREEN}[${1}]${NC} ${GREEN}✓ Success${NC}"
-  echo ""
 }
 
-step_skip() {
-  echo -e "${YELLOW}[${1}]${NC} ${YELLOW}⊘ Skipped${NC}"
-  echo ""
-}
-
-step_run() {
-  echo -e "  ${BLUE}→${NC} $1"
-}
-
-# Main CI steps
-echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}  Running CI Checks${NC}"
-echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo ""
+# Main CI header
+echo -e "${YELLOW}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${YELLOW}${BOLD}  Running CI Checks${NC}"
+echo -e "${YELLOW}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 
 # Proto check
 step_start "Proto Check"
-step_run "Running buf lint"
-make proto-lint > /dev/null 2>&1
+make proto-lint
 step_success "Proto Check"
 
 # Markdown lint
 step_start "Markdown Lint"
-step_run "Running markdownlint"
-make md-lint > /dev/null 2>&1
+make md-lint
 step_success "Markdown Lint"
 
 # Go tests
 step_start "Go Tests"
-step_run "Running go test with race detector"
-make test > /dev/null 2>&1
+make test
 step_success "Go Tests"
 
 # Build
 step_start "Build"
-step_run "Building server binary"
-make build > /dev/null 2>&1
+make build
 step_success "Build"
 
 # Integration tests
 step_start "Integration Tests"
-step_run "Starting server and running integration tests"
-make integration-test-full > /dev/null 2>&1
+make integration-test-full
 step_success "Integration Tests"
 
 # TypeScript type check
 step_start "TypeScript Type Check"
-step_run "Running tsc --noEmit"
-make ts-typecheck > /dev/null 2>&1
+make ts-typecheck
 step_success "TypeScript Type Check"
 
 # TypeScript tests
 step_start "TypeScript Tests"
-step_run "Running vitest"
-make ts-test > /dev/null 2>&1
+make ts-test
 step_success "TypeScript Tests"
 
 # Summary
-echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${GREEN}${BOLD}✓ All CI checks passed!${NC}"
-echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo ""
+echo -e "${GREEN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${GREEN}${BOLD}  ✓ All CI checks passed!${NC}"
+echo -e "${GREEN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
