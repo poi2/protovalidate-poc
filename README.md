@@ -324,14 +324,17 @@ make ts-examples
 ### 検証結果
 
 **Validation実行:**
+
 - ✅ Go実装と同じproto定義から生成されたコードを使用してvalidationを実行可能
 - ✅ 文字列長制約、メールアドレス形式、カスタムバリデーション（パスワード一致）が正常に動作
 
 **ValidationError構造:**
+
 - ✅ Go実装と一貫性のある構造（fieldPath, message, ruleId, reasonCode）
 - ✅ reasonコード変換（`string.min_len` → `STRING_MIN_LEN`）が正常に動作
 
 **テスト:**
+
 - ✅ 全11テストがパス（validation_test.goと同等のテストケース）
 
 詳細は [ts/examples/README.md](ts/examples/README.md) を参照してください。
