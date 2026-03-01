@@ -26,7 +26,11 @@ proto-check: proto-lint ## Check proto files (lint only, no breaking check on ma
 
 .PHONY: md-lint
 md-lint: ## Run markdownlint
-	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private
+	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private --ignore docs/generated --ignore docs/API.md --ignore docs/go-api
+
+.PHONY: md-fix
+md-fix: ## Auto-fix markdownlint errors
+	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private --ignore docs/generated --ignore docs/API.md --ignore docs/go-api --fix
 
 .PHONY: test
 test: ## Run Go unit tests
@@ -65,12 +69,24 @@ integration-test-full: ## Build, run server, test, then stop server
 ci: ## Run all CI checks with formatted output
 	@bash scripts/ci.sh
 
+.PHONY: proto-docs
+proto-docs: ## Generate proto documentation (HTML + Markdown)
+	@echo "Generating proto documentation with protoc-gen-doc..."
+	@cd proto && PATH="$(HOME)/go/bin:$(PATH)" buf generate --template buf.gen.docs.yaml
+	@echo "Generating custom Markdown API reference..."
+	@node scripts/generate-docs.js
+	@echo "Generated docs/generated/index.html, docs/generated/api.md, and docs/API.md"
+
+.PHONY: go-docs
+go-docs: ## Generate Go API documentation (Markdown + HTML)
+	@echo "Generating Go API documentation..."
+	@mkdir -p docs/go-api
+	@PATH="$(HOME)/go/bin:$(PATH)" gomarkdoc ./go/gen/user/v1 > docs/go-api/README.md
+	@pandoc docs/go-api/README.md -o docs/go-api/index.html --standalone --metadata title="Go API Documentation" --toc
+	@echo "Generated docs/go-api/README.md and docs/go-api/index.html"
+
 .PHONY: docs
-docs: ## Generate documentation
-	@echo "Generating HTML documentation..."
-	cd proto && buf generate --template buf.gen.docs.yaml
-	@echo "Documentation generated in docs/generated/"
-	@echo "Note: Check that protovalidate constraints are visible in the generated docs"
+docs: proto-docs ts-docs go-docs ## Generate all documentation
 
 .PHONY: ts-install
 ts-install: ## Install TypeScript dependencies
@@ -94,10 +110,14 @@ ts-examples: ## Run TypeScript examples
 	cd ts && npm run examples:decode-error
 	cd ts && npm run examples:reason-conversion
 
+.PHONY: ts-docs
+ts-docs: ## Generate TypeScript API documentation
+	cd ts && npm run docs
+
 .PHONY: clean
 clean: ## Clean build artifacts
 	rm -rf bin coverage.out .server.pid
-	rm -rf go/gen ts/gen ts/node_modules docs/generated
+	rm -rf go/gen ts/gen ts/node_modules docs/generated docs/api docs/go-api
 
 .PHONY: install-hooks
 install-hooks: ## Install git pre-push hook

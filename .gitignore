@@ -1,6 +1,8 @@
 # Generated files
 ts/gen/
 docs/generated/
+docs/api/
+docs/go-api/
 
 # Build artifacts
 bin/

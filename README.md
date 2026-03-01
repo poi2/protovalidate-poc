@@ -29,14 +29,19 @@ protovalidate を使って、FE/BE の両方で同じ validation を行えるこ
 ├── proto/                  # Proto 定義
 │   ├── buf.yaml
 │   ├── buf.gen.yaml
-│   ├── buf.gen.docs.yaml
 │   └── user/v1/
 │       └── user.proto     # バリデーションルール + reasonコメント付き
 ├── go/
 │   ├── gen/               # 生成されたコード
 │   └── server/
 │       └── main.go        # Connect-RPC サーバー + error details処理
-├── examples/              # 検証用サンプルコード
+├── ts/                    # TypeScript実装
+│   ├── gen/               # 生成されたコード
+│   ├── src/               # バリデータ・エラー処理
+│   ├── examples/          # TypeScript検証用サンプル
+│   ├── __tests__/         # Unit test (11 tests)
+│   └── typedoc.json       # TypeDocドキュメント設定
+├── examples/              # Go 検証用サンプルコード
 │   ├── README.md
 │   ├── validation_error_structure.go  # ValidationError構造の確認
 │   ├── decode_error_details.go        # Base64エラー詳細のデコード
@@ -46,9 +51,14 @@ protovalidate を使って、FE/BE の両方で同じ validation を行えるこ
 │       ├── create_user_json.yml  # JSON/Connect-RPC (error details検証含む)
 │       └── create_user.yml       # gRPC + JSON
 ├── docs/
-│   ├── generated/         # 生成されたドキュメント
+│   ├── generated/         # Proto ドキュメント (protoc-gen-doc生成)
+│   ├── api/               # TypeScript APIドキュメント (TypeDoc生成)
+│   ├── go-api/            # Go APIドキュメント (gomarkdoc + pandoc生成)
+│   ├── API.md             # カスタムMarkdown APIリファレンス
 │   └── question-from-claude.md
 ├── scripts/
+│   ├── ci.sh              # CI実行スクリプト
+│   ├── generate-docs.js   # Markdownドキュメント生成
 │   └── pre-push           # Git pre-push hook
 ├── validation_test.go     # Unit test
 ├── Makefile
@@ -103,10 +113,27 @@ make run-server
 ### ドキュメント生成
 
 ```bash
+# 全てのドキュメントを生成
 make docs
+
+# TypeScript API ドキュメント
+make ts-docs
+
+# Go API ドキュメント
+make go-docs
+
+# Markdown API リファレンス
+make proto-docs
 ```
 
-`docs/generated/index.html` にドキュメントが生成されます。
+生成されるドキュメント:
+
+- `docs/generated/index.html` - Proto ドキュメント（protoc-gen-doc HTML）
+- `docs/generated/api.md` - Proto ドキュメント（protoc-gen-doc Markdown）
+- `docs/API.md` - カスタム Markdown API リファレンス（reasonコード一覧）
+- `docs/api/index.html` - TypeScript API ドキュメント（TypeDoc HTML）
+- `docs/go-api/README.md` - Go API ドキュメント（gomarkdoc Markdown）
+- `docs/go-api/index.html` - Go API ドキュメント（pandoc HTML）
 
 ### CI チェック
 
@@ -311,8 +338,19 @@ go run examples/reason_conversion.go
 
 ### 5. ドキュメント生成
 
-buf の protoc-gen-doc プラグインを使用してドキュメント生成可能。
-protovalidate の制約情報も含まれることを確認。
+**TypeDoc による TypeScript API ドキュメント:**
+
+- protoファイルのコメント（reasonコード含む）がJSDocとして完全に含まれる
+- ブラウザで閲覧可能なHTML形式
+- 型定義とバリデーションルールが統合されたリファレンス
+
+**Markdown API リファレンス:**
+
+- Validation error reasonコード一覧（UPPER_SNAKE_CASE）
+- メッセージ定義
+- サービス定義
+
+動作確認: ✅
 
 ## 結論
 
