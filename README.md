@@ -156,9 +156,8 @@ make ci
 - **check-changes** - 変更ファイルを検出
 - **markdown-lint** - Markdownファイル変更時のみ実行
 - **proto-checks** - Protoファイル変更時のみ実行
-- **go-checks** - Go unit tests, build（Go/Proto変更時のみ）
+- **go-checks** - Go unit tests, build, integration tests（Go/Proto変更時のみ）
 - **typescript-checks** - TypeScript type check, unit tests（TS/Proto変更時のみ）
-- **integration-tests** - Go/Proto変更時のみ実行
 - **ci-success** - 全ジョブが成功またはスキップで完了したことを確認
 
 **実行トリガー:**
