@@ -17,7 +17,7 @@ proto-lint: ## Run buf lint
 	cd proto && buf lint
 
 .PHONY: proto-generate
-proto-generate: ## Generate Go code from proto files
+proto-generate: ## Generate Go and TypeScript code from proto files
 	cd proto && buf dep update && buf generate
 
 .PHONY: proto-check
@@ -62,7 +62,7 @@ integration-test-full: ## Build, run server, test, then stop server
 	@echo "Integration tests passed!"
 
 .PHONY: ci
-ci: proto-check md-lint test build integration-test-full ## Run all CI checks
+ci: proto-check md-lint test build integration-test-full ts-typecheck ts-test ## Run all CI checks
 
 .PHONY: docs
 docs: ## Generate documentation
@@ -71,10 +71,32 @@ docs: ## Generate documentation
 	@echo "Documentation generated in docs/generated/"
 	@echo "Note: Check that protovalidate constraints are visible in the generated docs"
 
+.PHONY: ts-install
+ts-install: ## Install TypeScript dependencies
+	cd ts && npm install
+
+.PHONY: ts-test
+ts-test: ## Run TypeScript tests
+	cd ts && npm test
+
+.PHONY: ts-build
+ts-build: ## Build TypeScript code
+	cd ts && npm run build
+
+.PHONY: ts-typecheck
+ts-typecheck: ## TypeScript type checking
+	cd ts && npm run typecheck
+
+.PHONY: ts-examples
+ts-examples: ## Run TypeScript examples
+	cd ts && npm run examples:validation-error
+	cd ts && npm run examples:decode-error
+	cd ts && npm run examples:reason-conversion
+
 .PHONY: clean
 clean: ## Clean build artifacts
 	rm -rf bin coverage.out .server.pid
-	rm -rf go/gen docs/generated
+	rm -rf go/gen ts/gen ts/node_modules docs/generated
 
 .PHONY: install-hooks
 install-hooks: ## Install git pre-push hook

@@ -280,9 +280,65 @@ Protovalidate は以下の用途で有効:
 - **構造化されたエラーレスポンス**: Google API標準に準拠した詳細なエラー情報を提供
 - **ローコンテキストな仕様**: protoファイルのコメントでエラー仕様（`reason`コード）を明記することで、Server/Client間のドキュメント同期が不要
 
+## TypeScript実装
+
+### セットアップ
+
+```bash
+# TypeScript依存関係のインストール
+make ts-install
+
+# Proto生成（Go + TypeScript）
+make proto-generate
+```
+
+### テスト実行
+
+```bash
+# 型チェック
+make ts-typecheck
+
+# テスト実行
+make ts-test
+
+# ビルド
+make ts-build
+```
+
+### Examplesの実行
+
+```bash
+# ValidationErrorの構造確認
+npm run examples:validation-error
+
+# エラー詳細のデコード
+npm run examples:decode-error
+
+# Reasonコード変換の確認
+npm run examples:reason-conversion
+
+# または、全てまとめて実行
+make ts-examples
+```
+
+### 検証結果
+
+**Validation実行:**
+- ✅ Go実装と同じproto定義から生成されたコードを使用してvalidationを実行可能
+- ✅ 文字列長制約、メールアドレス形式、カスタムバリデーション（パスワード一致）が正常に動作
+
+**ValidationError構造:**
+- ✅ Go実装と一貫性のある構造（fieldPath, message, ruleId, reasonCode）
+- ✅ reasonコード変換（`string.min_len` → `STRING_MIN_LEN`）が正常に動作
+
+**テスト:**
+- ✅ 全11テストがパス（validation_test.goと同等のテストケース）
+
+詳細は [ts/examples/README.md](ts/examples/README.md) を参照してください。
+
 ## Next Steps
 
-- TypeScript での実装と検証
+- ~~TypeScript での実装と検証~~ ✅ 完了
 - より複雑な validation ルールの検証
 - 実際のプロダクトでの適用検討
 
