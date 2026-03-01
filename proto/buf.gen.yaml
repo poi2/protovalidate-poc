@@ -7,6 +7,7 @@ managed:
     - file_option: go_package_prefix
       value: github.com/poi2/protovalidate-poc/go/gen
 plugins:
+  # Go plugins
   - remote: buf.build/protocolbuffers/go
     out: ../go/gen
     opt:
@@ -15,3 +16,16 @@ plugins:
     out: ../go/gen
     opt:
       - paths=source_relative
+
+  # TypeScript plugins
+  - remote: buf.build/bufbuild/es
+    out: ../ts/gen
+    opt:
+      - target=ts
+      - import_extension=none
+    include_imports: true
+  - remote: buf.build/connectrpc/es
+    out: ../ts/gen
+    opt:
+      - target=ts
+      - import_extension=none
