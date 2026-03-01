@@ -114,13 +114,57 @@ make docs
 make ci
 ```
 
+**出力例（ローカル）:**
+
+```text
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Running CI Checks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Proto Check] Starting...
+  → Running buf lint
+[Proto Check] ✓ Success
+
+[Go Tests] Starting...
+  → Running go test with race detector
+[Go Tests] ✓ Success
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ All CI checks passed!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
 以下のチェックが実行されます:
 
 - Proto lint
 - Markdown lint
-- Go unit test
+- Go unit tests (11 tests)
 - Build
-- Integration test
+- Integration tests
+- TypeScript type check
+- TypeScript unit tests (11 tests)
+
+**色の自動制御:**
+
+- **ローカル**: 色付き表示（青/緑/黄色）
+- **CI環境**: 色なし（エスケープシーケンスを出力しない）
+
+**GitHub Actions CI:**
+
+変更されたファイルに応じて必要なチェックのみを実行します:
+
+- **check-changes** - 変更ファイルを検出
+- **markdown-lint** - Markdownファイル変更時のみ実行
+- **proto-checks** - Protoファイル変更時のみ実行
+- **go-checks** - Go unit tests, build, integration tests（Go/Proto変更時のみ）
+- **typescript-checks** - TypeScript type check, unit tests（TS/Proto変更時のみ）
+- **ci-success** - 全ジョブが成功またはスキップで完了したことを確認
+
+**実行トリガー:**
+
+- **Pull Request**: 変更されたファイルに応じて必要なチェックのみ実行
+- **main merge**: 全てのチェックを実行
+- **定期実行**: 毎日24:00 JST (15:00 UTC) に全てのチェックを実行
 
 ### Pre-push hook のインストール
 

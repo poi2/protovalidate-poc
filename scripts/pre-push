@@ -1,10 +1,22 @@
 #!/bin/bash
 
+# Pre-push hook to run CI checks locally before pushing
+# Install: make install-hooks
+
 set -e
 
-echo "Running pre-push checks..."
+# Colors
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${YELLOW}Running pre-push checks...${NC}"
+echo ""
 
 # Run all CI checks
 make ci
 
-echo "✓ All pre-push checks passed!"
+echo ""
+echo -e "${GREEN}✓ All pre-push checks passed!${NC}"
+echo "Proceeding with push..."
