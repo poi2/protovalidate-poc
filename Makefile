@@ -62,7 +62,8 @@ integration-test-full: ## Build, run server, test, then stop server
 	@echo "Integration tests passed!"
 
 .PHONY: ci
-ci: proto-check md-lint test build integration-test-full ts-typecheck ts-test ## Run all CI checks
+ci: ## Run all CI checks with formatted output
+	@bash scripts/ci.sh
 
 .PHONY: docs
 docs: ## Generate documentation
