@@ -183,7 +183,7 @@ jobs:
       - name: TypeScript type check
         run: make ts-typecheck
 
-      - name: Run TypeScript tests
+      - name: Run TypeScript unit tests
         run: make ts-test
 
   # Integration tests

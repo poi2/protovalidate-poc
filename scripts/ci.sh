@@ -71,10 +71,10 @@ step_start "TypeScript Type Check"
 make ts-typecheck
 step_success "TypeScript Type Check"
 
-# TypeScript tests
-step_start "TypeScript Tests"
+# TypeScript unit tests
+step_start "TypeScript Unit Tests"
 make ts-test
-step_success "TypeScript Tests"
+step_success "TypeScript Unit Tests"
 
 # Summary
 echo ""

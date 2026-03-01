@@ -138,10 +138,11 @@ make ci
 
 - Proto lint
 - Markdown lint
-- Go unit test
+- Go unit tests (11 tests)
 - Build
-- TypeScript type check & test
-- Integration test
+- Integration tests
+- TypeScript type check
+- TypeScript unit tests (11 tests)
 
 **色の自動制御:**
 
@@ -155,8 +156,8 @@ make ci
 - **check-changes** - 変更ファイルを検出
 - **markdown-lint** - Markdownファイル変更時のみ実行
 - **proto-checks** - Protoファイル変更時のみ実行
-- **go-checks** - Go/Protoファイル変更時のみ実行
-- **typescript-checks** - TypeScript/Protoファイル変更時のみ実行
+- **go-checks** - Go unit tests, build（Go/Proto変更時のみ）
+- **typescript-checks** - TypeScript type check, unit tests（TS/Proto変更時のみ）
 - **integration-tests** - Go/Proto変更時のみ実行
 - **ci-success** - 全ジョブが成功またはスキップで完了したことを確認
 
