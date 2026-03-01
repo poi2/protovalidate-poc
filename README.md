@@ -120,7 +120,26 @@ make ci
 - Markdown lint
 - Go unit test
 - Build
+- TypeScript type check & test
 - Integration test
+
+**GitHub Actions CI:**
+
+変更されたファイルに応じて必要なチェックのみを実行します:
+
+- **check-changes** - 変更ファイルを検出
+- **markdown-lint** - Markdownファイル変更時のみ実行
+- **proto-checks** - Protoファイル変更時のみ実行
+- **go-checks** - Go/Protoファイル変更時のみ実行
+- **typescript-checks** - TypeScript/Protoファイル変更時のみ実行
+- **integration-tests** - Go/Proto変更時のみ実行
+- **ci-success** - 全ジョブが成功またはスキップで完了したことを確認
+
+**実行トリガー:**
+
+- **Pull Request**: 変更されたファイルに応じて必要なチェックのみ実行
+- **main merge**: 全てのチェックを実行
+- **定期実行**: 毎日24:00 JST (15:00 UTC) に全てのチェックを実行
 
 ### Pre-push hook のインストール
 
