@@ -65,12 +65,12 @@ integration-test-full: ## Build, run server, test, then stop server
 ci: ## Run all CI checks with formatted output
 	@bash scripts/ci.sh
 
+.PHONY: proto-docs
+proto-docs: ## Generate Markdown API reference from proto files
+	node scripts/generate-docs.js
+
 .PHONY: docs
-docs: ## Generate documentation
-	@echo "Generating HTML documentation..."
-	cd proto && buf generate --template buf.gen.docs.yaml
-	@echo "Documentation generated in docs/generated/"
-	@echo "Note: Check that protovalidate constraints are visible in the generated docs"
+docs: proto-docs ts-docs ## Generate all documentation
 
 .PHONY: ts-install
 ts-install: ## Install TypeScript dependencies
@@ -94,10 +94,14 @@ ts-examples: ## Run TypeScript examples
 	cd ts && npm run examples:decode-error
 	cd ts && npm run examples:reason-conversion
 
+.PHONY: ts-docs
+ts-docs: ## Generate TypeScript API documentation
+	cd ts && npm run docs
+
 .PHONY: clean
 clean: ## Clean build artifacts
 	rm -rf bin coverage.out .server.pid
-	rm -rf go/gen ts/gen ts/node_modules docs/generated
+	rm -rf go/gen ts/gen ts/node_modules docs/generated docs/api
 
 .PHONY: install-hooks
 install-hooks: ## Install git pre-push hook
