@@ -28,6 +28,10 @@ proto-check: proto-lint ## Check proto files (lint only, no breaking check on ma
 md-lint: ## Run markdownlint
 	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private
 
+.PHONY: md-fix
+md-fix: ## Auto-fix markdownlint errors
+	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private --fix
+
 .PHONY: test
 test: ## Run Go unit tests
 	go test -v -race -coverprofile=coverage.out ./...
