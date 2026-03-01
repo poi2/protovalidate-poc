@@ -26,11 +26,11 @@ proto-check: proto-lint ## Check proto files (lint only, no breaking check on ma
 
 .PHONY: md-lint
 md-lint: ## Run markdownlint
-	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private
+	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private --ignore docs/generated --ignore docs/API.md --ignore docs/go-api
 
 .PHONY: md-fix
 md-fix: ## Auto-fix markdownlint errors
-	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private --fix
+	markdownlint '**/*.md' --ignore node_modules --ignore 'ts/node_modules' --ignore go --ignore __private --ignore docs/generated --ignore docs/API.md --ignore docs/go-api --fix
 
 .PHONY: test
 test: ## Run Go unit tests
