@@ -114,6 +114,26 @@ make docs
 make ci
 ```
 
+**出力例（ローカル）:**
+
+```text
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Running CI Checks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[Proto Check] Starting...
+  → Running buf lint
+[Proto Check] ✓ Success
+
+[Go Tests] Starting...
+  → Running go test with race detector
+[Go Tests] ✓ Success
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ All CI checks passed!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
 以下のチェックが実行されます:
 
 - Proto lint
@@ -122,6 +142,11 @@ make ci
 - Build
 - TypeScript type check & test
 - Integration test
+
+**色の自動制御:**
+
+- **ローカル**: 色付き表示（青/緑/黄色）
+- **CI環境**: 色なし（エスケープシーケンスを出力しない）
 
 **GitHub Actions CI:**
 
