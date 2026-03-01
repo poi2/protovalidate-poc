@@ -52,6 +52,7 @@ protovalidate を使って、FE/BE の両方で同じ validation を行えるこ
 │       └── create_user.yml       # gRPC + JSON
 ├── docs/
 │   ├── api/               # TypeScript APIドキュメント (TypeDoc生成)
+│   ├── go-api/            # Go APIドキュメント (gomarkdoc + pandoc生成)
 │   ├── API.md             # Markdown APIリファレンス
 │   └── question-from-claude.md
 ├── scripts/
@@ -117,6 +118,9 @@ make docs
 # TypeScript API ドキュメント
 make ts-docs
 
+# Go API ドキュメント
+make go-docs
+
 # Markdown API リファレンス
 make proto-docs
 ```
@@ -124,6 +128,8 @@ make proto-docs
 生成されるドキュメント:
 
 - `docs/api/index.html` - TypeScript API ドキュメント（TypeDoc）
+- `docs/go-api/README.md` - Go API ドキュメント（Markdown）
+- `docs/go-api/index.html` - Go API ドキュメント（HTML）
 - `docs/API.md` - Markdown API リファレンス（reasonコード一覧含む）
 
 ### CI チェック

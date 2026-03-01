@@ -69,8 +69,16 @@ ci: ## Run all CI checks with formatted output
 proto-docs: ## Generate Markdown API reference from proto files
 	node scripts/generate-docs.js
 
+.PHONY: go-docs
+go-docs: ## Generate Go API documentation (Markdown + HTML)
+	@echo "Generating Go API documentation..."
+	@mkdir -p docs/go-api
+	@PATH="$(HOME)/go/bin:$(PATH)" gomarkdoc ./go/gen/user/v1 > docs/go-api/README.md
+	@pandoc docs/go-api/README.md -o docs/go-api/index.html --standalone --metadata title="Go API Documentation" --toc
+	@echo "Generated docs/go-api/README.md and docs/go-api/index.html"
+
 .PHONY: docs
-docs: proto-docs ts-docs ## Generate all documentation
+docs: proto-docs ts-docs go-docs ## Generate all documentation
 
 .PHONY: ts-install
 ts-install: ## Install TypeScript dependencies
@@ -101,7 +109,7 @@ ts-docs: ## Generate TypeScript API documentation
 .PHONY: clean
 clean: ## Clean build artifacts
 	rm -rf bin coverage.out .server.pid
-	rm -rf go/gen ts/gen ts/node_modules docs/generated docs/api
+	rm -rf go/gen ts/gen ts/node_modules docs/generated docs/api docs/go-api
 
 .PHONY: install-hooks
 install-hooks: ## Install git pre-push hook
