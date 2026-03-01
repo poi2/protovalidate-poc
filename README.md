@@ -51,9 +51,10 @@ protovalidate を使って、FE/BE の両方で同じ validation を行えるこ
 │       ├── create_user_json.yml  # JSON/Connect-RPC (error details検証含む)
 │       └── create_user.yml       # gRPC + JSON
 ├── docs/
+│   ├── generated/         # Proto ドキュメント (protoc-gen-doc生成)
 │   ├── api/               # TypeScript APIドキュメント (TypeDoc生成)
 │   ├── go-api/            # Go APIドキュメント (gomarkdoc + pandoc生成)
-│   ├── API.md             # Markdown APIリファレンス
+│   ├── API.md             # カスタムMarkdown APIリファレンス
 │   └── question-from-claude.md
 ├── scripts/
 │   ├── ci.sh              # CI実行スクリプト
@@ -127,10 +128,12 @@ make proto-docs
 
 生成されるドキュメント:
 
-- `docs/api/index.html` - TypeScript API ドキュメント（TypeDoc）
-- `docs/go-api/README.md` - Go API ドキュメント（Markdown）
-- `docs/go-api/index.html` - Go API ドキュメント（HTML）
-- `docs/API.md` - Markdown API リファレンス（reasonコード一覧含む）
+- `docs/generated/index.html` - Proto ドキュメント（protoc-gen-doc HTML）
+- `docs/generated/api.md` - Proto ドキュメント（protoc-gen-doc Markdown）
+- `docs/API.md` - カスタム Markdown API リファレンス（reasonコード一覧）
+- `docs/api/index.html` - TypeScript API ドキュメント（TypeDoc HTML）
+- `docs/go-api/README.md` - Go API ドキュメント（gomarkdoc Markdown）
+- `docs/go-api/index.html` - Go API ドキュメント（pandoc HTML）
 
 ### CI チェック
 

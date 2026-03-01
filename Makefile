@@ -66,8 +66,12 @@ ci: ## Run all CI checks with formatted output
 	@bash scripts/ci.sh
 
 .PHONY: proto-docs
-proto-docs: ## Generate Markdown API reference from proto files
-	node scripts/generate-docs.js
+proto-docs: ## Generate proto documentation (HTML + Markdown)
+	@echo "Generating proto documentation with protoc-gen-doc..."
+	@cd proto && PATH="$(HOME)/go/bin:$(PATH)" buf generate --template buf.gen.docs.yaml
+	@echo "Generating custom Markdown API reference..."
+	@node scripts/generate-docs.js
+	@echo "Generated docs/generated/index.html, docs/generated/api.md, and docs/API.md"
 
 .PHONY: go-docs
 go-docs: ## Generate Go API documentation (Markdown + HTML)
